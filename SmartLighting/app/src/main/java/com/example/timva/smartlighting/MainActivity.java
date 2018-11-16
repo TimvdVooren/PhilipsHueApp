@@ -32,9 +32,11 @@ public class MainActivity extends AppCompatActivity implements VolleyListener{
         emulatorSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if(emulatorSwitch.isChecked()){
-//                    connection.establishConnection("http://localhost:80/api/153c1ccc98939a3873887cf718cf9f1");
-//                }
+                lamps.clear();
+                arrayAdapter.notifyDataSetChanged();
+                if(emulatorSwitch.isChecked()){
+                    connection.establishConnection("http://145.49.12.150:80/api/");
+                }
             }
         });
         //recycler = findViewById(R.id.LampRecycler);
