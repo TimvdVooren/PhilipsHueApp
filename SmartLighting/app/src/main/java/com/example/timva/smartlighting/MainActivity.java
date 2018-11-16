@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
 
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements VolleyListener{
     private RecyclerView lampList;
     private ArrayList<Lamp> lamps;
     private MainRecyclerAdapter mainRecyclerAdapter;
+    private LampFragment lampFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,10 @@ public class MainActivity extends AppCompatActivity implements VolleyListener{
                 }
             }
         });
-        //recycler = findViewById(R.id.LampRecycler);
+
+        lampFragment = (LampFragment) getFragmentManager().findFragmentById(R.id.LampFragment);
+        ImageView lampImage = findViewById(R.id.LampFragmentImage);
+        lampImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
 
         lampList = findViewById(R.id.MainList);
         lampList.setHasFixedSize(true);
