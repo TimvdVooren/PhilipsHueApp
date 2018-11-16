@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        connection = new VolleyConnection(getApplicationContext(), this);
+        connection = VolleyConnection.getInstance(getApplicationContext(), this);
         lamps = new ArrayList<>();
 
         emulatorSwitch = findViewById(R.id.EmulatorSwitch);
@@ -37,10 +37,10 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 lamps.clear();
+                connection.setApiCode(null);
                 mainRecyclerAdapter.notifyDataSetChanged();
-                if(emulatorSwitch.isChecked()){
-                    connection.establishConnection("http://145.49.58.161/api/");
-                }
+                if(emulatorSwitch.isChecked())
+                    connection.establishConnection("http://145.49.12.150:80/api/");
             }
         });
 

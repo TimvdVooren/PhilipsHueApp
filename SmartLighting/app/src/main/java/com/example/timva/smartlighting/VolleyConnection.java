@@ -28,7 +28,9 @@ public class VolleyConnection {
     private Context context;
     private RequestQueue queue;
     private VolleyListener volleyListener;
-    private String apiCode;
+
+    private String url = "";
+    private String apiCode = null;
 
     public VolleyConnection(Context context, VolleyListener listener){
         this.context = context;
@@ -43,10 +45,17 @@ public class VolleyConnection {
     }
 
     public void establishConnection(String url){
-        sendStartUpRequest(url, "{\"devicetype\":\"TimsHueApp\"}", Request.Method.POST);
+        this.url = url;
+        sendRequest(url, "{\"devicetype\":\"TimsHueApp\"}", Request.Method.POST);
     }
 
-    private void sendStartUpRequest(String requestUrl, final String requestBody, int requestMethod){
+    public void changeLamp(Lamp lamp){
+        String lampUrl = url + apiCode + "/lights/" + lamp.getId() + "/state/";
+        String requestBody = String.format("{\"on\":%b, \"bri\":%d, \"hue\":%d, \"sat\":%d}", lamp.isOn(), lamp.getBri(), lamp.getHue(), lamp.getSat());
+        sendRequest(lampUrl, requestBody, Request.Method.PUT);
+    }
+
+    private void sendRequest(final String requestUrl, final String requestBody, int requestMethod){
         CustomJsonRequest request = null;
 
         try {
@@ -57,13 +66,7 @@ public class VolleyConnection {
                     new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
-                            System.out.println(response);
-                            try {
-                                apiCode = response.getJSONObject(0).getJSONObject("success").getString("username");
-                                getLamps("http://145.49.58.161/api/" + apiCode);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            onResponseListener(response, requestUrl);
                         }
                     },
                     new Response.ErrorListener() {
@@ -121,10 +124,29 @@ public class VolleyConnection {
         this.queue.add(request);
     }
 
+    private void onResponseListener(JSONArray response, String url){
+        try {
+            if(apiCode == null) {
+                apiCode = response.getJSONObject(0).getJSONObject("success").getString("username");
+                getLamps(url + apiCode);
+            } else{
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void onErrorListener(VolleyError error){
         Log.i("HUE", "NOK");
+    }
 
+    public String getApiCode(){
+        return apiCode;
+    }
 
+    public void setApiCode(String apiCode){
+        this.apiCode = apiCode;
     }
 
     public String getApiCode() {
