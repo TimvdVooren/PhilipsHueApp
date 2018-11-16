@@ -2,6 +2,7 @@ package com.example.timva.smartlighting;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.widget.ArrayAdapter;
@@ -15,9 +16,9 @@ public class MainActivity extends AppCompatActivity implements VolleyListener{
     private Switch emulatorSwitch;
     private RecyclerView recycler;
     private VolleyConnection connection;
-    private ListView lampList;
+    private RecyclerView lampList;
     private ArrayList<Lamp> lamps;
-    private ArrayAdapter<Lamp> arrayAdapter;
+    private MainRecyclerAdapter mainRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +40,10 @@ public class MainActivity extends AppCompatActivity implements VolleyListener{
         //recycler = findViewById(R.id.LampRecycler);
 
         lampList = findViewById(R.id.MainList);
-        arrayAdapter = new CustomAdapter(getApplicationContext(), lamps);
-        lampList.setAdapter(arrayAdapter);
+        lampList.setHasFixedSize(true);
+        lampList.setLayoutManager(new LinearLayoutManager(this));
+        mainRecyclerAdapter = new MainRecyclerAdapter(this, lamps);
+        lampList.setAdapter(mainRecyclerAdapter);
 
         connection.getLamps("http://145.49.58.161/api/aa510a0770ab7b1620cbf4e7e1231f9");
     }
@@ -48,12 +51,13 @@ public class MainActivity extends AppCompatActivity implements VolleyListener{
     @Override
     protected void onResume(){
         super.onResume();
+
     }
 
     @Override
     public void OnLampAvailable(Lamp lamp) {
         lamps.add(lamp);
-        arrayAdapter.notifyDataSetChanged();
+        mainRecyclerAdapter.notifyDataSetChanged();
     }
 
     @Override
