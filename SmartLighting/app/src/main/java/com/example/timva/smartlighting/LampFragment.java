@@ -26,11 +26,14 @@ public class LampFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View lampView = inflater.inflate(R.layout.lamp_fragment, container, false);
+        lampView = inflater.inflate(R.layout.lamp_fragment, container, false);
 
-        Intent lampIntent = getActivity().getIntent();
-        lamp = lampIntent.getParcelableExtra("LAMP");
+        return lampView;
+    }
 
+    public void setLampView(Lamp lamp)
+    {
+        this.lamp = lamp;
         powerSwitch = lampView.findViewById(R.id.PowerSwitch);
         hueSlider = lampView.findViewById(R.id.HueSlider);
         saturationSlider = lampView.findViewById(R.id.SaturationSlider);
@@ -38,8 +41,6 @@ public class LampFragment extends Fragment {
         lampImage = lampView.findViewById(R.id.LampFragmentImage);
 
         setListeners();
-
-        return lampView;
     }
 
     private void setLampColor(){
@@ -48,7 +49,7 @@ public class LampFragment extends Fragment {
         lampHSV[1] = (float) lamp.getSat()/254.f;
         lampHSV[2] = (float) lamp.getBri()/254.f;
         lampImage.setBackgroundColor(Color.HSVToColor(lampHSV));
-        connection.changeLamp(lamp);
+//        connection.changeLamp(lamp);
     }
 
     private void setListeners() {
@@ -111,4 +112,5 @@ public class LampFragment extends Fragment {
             }
         });
     }
+
 }

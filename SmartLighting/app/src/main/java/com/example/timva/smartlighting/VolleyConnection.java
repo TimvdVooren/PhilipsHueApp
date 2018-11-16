@@ -149,7 +149,5 @@ public class VolleyConnection {
         this.apiCode = apiCode;
     }
 
-    public String getApiCode() {
-        return apiCode;
-    }
+
 }
