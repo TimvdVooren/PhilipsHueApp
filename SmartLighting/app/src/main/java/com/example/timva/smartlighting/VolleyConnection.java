@@ -4,6 +4,7 @@ import android.app.VoiceInteractor;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -24,10 +25,10 @@ import java.util.Random;
 
 public class VolleyConnection {
     private static VolleyConnection instance = null;
-    private JSONObject requestResponse;
     private Context context;
     private RequestQueue queue;
     private VolleyListener volleyListener;
+    private String apiCode;
 
     public VolleyConnection(Context context, VolleyListener listener){
         this.context = context;
@@ -46,18 +47,23 @@ public class VolleyConnection {
     }
 
     private void sendRequest(String requestUrl, final String requestBody, int requestMethod){
-        JsonObjectRequest request = null;
+        CustomJsonRequest request = null;
 
         try {
-            request = new JsonObjectRequest(
+            request = new CustomJsonRequest(
                     requestMethod,
                     requestUrl,
                     new JSONObject(requestBody),
-                    new Response.Listener<JSONObject>() {
+                    new Response.Listener<JSONArray>() {
                         @Override
-                        public void onResponse(JSONObject response) {
-                            requestResponse = response;
-
+                        public void onResponse(JSONArray response) {
+                            System.out.println(response);
+                            try {
+                                apiCode = response.getJSONObject(0).getJSONObject("success").getString("username");
+                                getLamps("http://145.49.12.150/api/" + apiCode);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     },
                     new Response.ErrorListener() {
