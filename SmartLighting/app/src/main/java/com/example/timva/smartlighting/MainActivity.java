@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 lamps.clear();
+                mainRecyclerAdapter.notifyDataSetChanged();
                 if(emulatorSwitch.isChecked()){
                     connection.establishConnection("http://145.49.58.161/api/");
                 }
@@ -44,8 +45,6 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
         });
 
         lampFragment = (LampFragment) getFragmentManager().findFragmentById(R.id.LampFragment);
-        ImageView lampImage = findViewById(R.id.LampFragmentImage);
-        lampImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
 
         masterFragment = (MasterFragment) getFragmentManager().findFragmentById(R.id.MainMasterFragment);
 
