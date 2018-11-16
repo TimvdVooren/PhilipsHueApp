@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 public class VolleyConnection {
@@ -86,21 +87,14 @@ public class VolleyConnection {
                     public void onResponse(JSONObject response) {
                         Log.i("HUE", "OK");
                         try {
-                            JSONObject lamp1 = response.getJSONObject("lights").getJSONObject("1");
-                            JSONObject lamp2 = response.getJSONObject("lights").getJSONObject("2");
-                            JSONObject lamp3 = response.getJSONObject("lights").getJSONObject("3");
-                            ArrayList<JSONObject> jobjects = new ArrayList<>();
-                            jobjects.add(lamp1);
-                            jobjects.add(lamp2);
-                            jobjects.add(lamp3);
-                            int id = 0;
-                            for(JSONObject j : jobjects)
+                            JSONObject lights = response.getJSONObject("lights");
+                            JSONArray jsonArray = lights.toJSONArray(lights.names());
+                            for (int i = 0; i < jsonArray.length(); i++)
                             {
-                                id++;
-                                Lamp lamp = new Lamp(id,j.getJSONObject("state").getBoolean("on"), j.getJSONObject("state").getInt("bri"), j.getJSONObject("state").getInt("hue"), j.getJSONObject("state").getInt("sat") );
+                                JSONObject lamp1 = jsonArray.getJSONObject(i);
+                                Lamp lamp = new Lamp(i+1,lamp1.getJSONObject("state").getBoolean("on"), lamp1.getJSONObject("state").getInt("bri"), lamp1.getJSONObject("state").getInt("hue"), lamp1.getJSONObject("state").getInt("sat") );
                                 volleyListener.OnLampAvailable(lamp);
                             }
-
 
                         } catch (JSONException e) {
                             e.printStackTrace();

@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements VolleyListener{
         arrayAdapter = new CustomAdapter(getApplicationContext(), lamps);
         lampList.setAdapter(arrayAdapter);
 
-        connection.getLamps("http://192.168.2.12/api/153c1ccc98939a3873887cf718cf9f1");
+        connection.getLamps("http://145.49.58.161/api/aa510a0770ab7b1620cbf4e7e1231f9");
     }
 
     @Override
