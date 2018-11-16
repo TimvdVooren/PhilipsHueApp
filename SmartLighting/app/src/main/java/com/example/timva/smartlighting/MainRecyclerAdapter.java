@@ -1,11 +1,15 @@
 package com.example.timva.smartlighting;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -33,6 +37,11 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
 
         holder.title.setText("Lamp " + lamp.getId());
         holder.onText.setText("On: " + lamp.isOn());
+        float[] lampHSV = new float[3];
+        lampHSV[0] = ((float) lamp.getHue()/65535.f) * 360;
+        lampHSV[1] = (float) lamp.getSat()/254.f;
+        lampHSV[2] = (float) lamp.getBri()/254.f;
+        holder.lampColor.setBackgroundColor(Color.HSVToColor(lampHSV));
     }
 
     @Override
@@ -43,6 +52,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         TextView onText;
+        ImageView lampColor;
 
         public ViewHolder(View itemView, final Context c) {
             super(itemView);
@@ -50,6 +60,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
 
             title = itemView.findViewById(R.id.DetailListTitle);
             onText = itemView.findViewById(R.id.DetailedOnText);
+            lampColor = itemView.findViewById(R.id.DetailedListImage);
         }
     }
 }
