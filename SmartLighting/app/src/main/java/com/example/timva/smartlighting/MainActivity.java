@@ -10,17 +10,19 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
+import java.util.*;
+import java.net.*;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements VolleyListener{
+public class MainActivity extends AppCompatActivity implements VolleyListener, OnFragmentInteractionListener{
     private Switch emulatorSwitch;
-    private RecyclerView recycler;
     private VolleyConnection connection;
     private RecyclerView lampList;
     private ArrayList<Lamp> lamps;
     private MainRecyclerAdapter mainRecyclerAdapter;
     private LampFragment lampFragment;
+    private MasterFragment masterFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +37,8 @@ public class MainActivity extends AppCompatActivity implements VolleyListener{
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 lamps.clear();
-                arrayAdapter.notifyDataSetChanged();
                 if(emulatorSwitch.isChecked()){
-                    connection.establishConnection("http://145.49.12.150:80/api/");
+                    connection.establishConnection("http://145.49.58.161/api/");
                 }
             }
         });
@@ -46,13 +47,14 @@ public class MainActivity extends AppCompatActivity implements VolleyListener{
         ImageView lampImage = findViewById(R.id.LampFragmentImage);
         lampImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
 
+        masterFragment = (MasterFragment) getFragmentManager().findFragmentById(R.id.MainMasterFragment);
+
+
         lampList = findViewById(R.id.MainList);
         lampList.setHasFixedSize(true);
         lampList.setLayoutManager(new LinearLayoutManager(this));
-        mainRecyclerAdapter = new MainRecyclerAdapter(this, lamps);
+        mainRecyclerAdapter = new MainRecyclerAdapter(this, lamps, this);
         lampList.setAdapter(mainRecyclerAdapter);
-
-        connection.getLamps("http://145.49.58.161/api/aa510a0770ab7b1620cbf4e7e1231f9");
     }
 
     @Override
@@ -70,5 +72,10 @@ public class MainActivity extends AppCompatActivity implements VolleyListener{
     @Override
     public void OnLampError(String error) {
         System.out.println(error);
+    }
+
+    @Override
+    public void onFragmentInteraction(Lamp lamp) {
+        lampFragment.setView(lamp);
     }
 }

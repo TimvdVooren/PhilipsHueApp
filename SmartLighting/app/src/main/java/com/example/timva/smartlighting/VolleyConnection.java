@@ -43,10 +43,10 @@ public class VolleyConnection {
     }
 
     public void establishConnection(String url){
-        sendRequest(url, "{\"devicetype\":\"TimsHueApp\"}", Request.Method.POST);
+        sendStartUpRequest(url, "{\"devicetype\":\"TimsHueApp\"}", Request.Method.POST);
     }
 
-    private void sendRequest(String requestUrl, final String requestBody, int requestMethod){
+    private void sendStartUpRequest(String requestUrl, final String requestBody, int requestMethod){
         CustomJsonRequest request = null;
 
         try {
@@ -60,7 +60,7 @@ public class VolleyConnection {
                             System.out.println(response);
                             try {
                                 apiCode = response.getJSONObject(0).getJSONObject("success").getString("username");
-                                getLamps("http://145.49.12.150/api/" + apiCode);
+                                getLamps("http://145.49.58.161/api/" + apiCode);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -125,5 +125,9 @@ public class VolleyConnection {
         Log.i("HUE", "NOK");
 
 
+    }
+
+    public String getApiCode() {
+        return apiCode;
     }
 }

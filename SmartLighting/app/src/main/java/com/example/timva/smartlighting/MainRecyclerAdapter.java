@@ -1,11 +1,13 @@
 package com.example.timva.smartlighting;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -14,10 +16,12 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
 
     private Context context;
     private List<Lamp> lamps;
+    private OnFragmentInteractionListener fragmentInteractionListener;
 
-    public MainRecyclerAdapter(Context context, List<Lamp> lamps) {
+    public MainRecyclerAdapter(Context context, List<Lamp> lamps, OnFragmentInteractionListener fragmentInteractionListener) {
         this.context = context;
         this.lamps = lamps;
+        this.fragmentInteractionListener = fragmentInteractionListener;
     }
     @NonNull
     @Override
@@ -50,6 +54,18 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
 
             title = itemView.findViewById(R.id.DetailListTitle);
             onText = itemView.findViewById(R.id.DetailedOnText);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Lamp lamp = lamps.get(getAdapterPosition());
+                    fragmentInteractionListener.onFragmentInteraction(lamp);
+                }
+            });
+
+
         }
     }
+
+
 }
