@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
                 connection.setApiCode(null);
                 mainRecyclerAdapter.notifyDataSetChanged();
                 if(emulatorSwitch.isChecked())
-                    connection.establishConnection("http://145.49.58.161:80/api/");
+                    connection.establishConnection("http://145.49.12.150:80/api/");
             }
         });
 

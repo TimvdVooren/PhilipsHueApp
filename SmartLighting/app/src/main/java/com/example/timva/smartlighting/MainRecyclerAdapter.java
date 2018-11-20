@@ -44,7 +44,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
         lampHSV[0] = ((float) lamp.getHue()/65535.f) * 360;
         lampHSV[1] = (float) lamp.getSat()/254.f;
         lampHSV[2] = (float) lamp.getBri()/254.f;
-        holder.lampColor.setBackgroundColor(Color.HSVToColor(lampHSV));
+        holder.lampColor.setColorFilter(Color.HSVToColor(lampHSV));
     }
 
     @Override
@@ -72,8 +72,6 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
                     fragmentInteractionListener.onFragmentInteraction(lamp);
                 }
             });
-
-
         }
     }
 

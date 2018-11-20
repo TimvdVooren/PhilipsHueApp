@@ -27,6 +27,15 @@ public class LampFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         lampView = inflater.inflate(R.layout.lamp_fragment, container, false);
+        powerSwitch = lampView.findViewById(R.id.PowerSwitch);
+        hueSlider = lampView.findViewById(R.id.HueSlider);
+        saturationSlider = lampView.findViewById(R.id.SaturationSlider);
+        brightnessSlider = lampView.findViewById(R.id.BrightnessSlider);
+
+        hueSlider.setEnabled(false);
+        saturationSlider.setEnabled(false);
+        brightnessSlider.setEnabled(false);
+        powerSwitch.setEnabled(false);
 
         return lampView;
     }
@@ -34,12 +43,10 @@ public class LampFragment extends Fragment {
     public void setLampView(Lamp lamp)
     {
         this.lamp = lamp;
-        powerSwitch = lampView.findViewById(R.id.PowerSwitch);
-        hueSlider = lampView.findViewById(R.id.HueSlider);
-        saturationSlider = lampView.findViewById(R.id.SaturationSlider);
-        brightnessSlider = lampView.findViewById(R.id.BrightnessSlider);
         lampImage = lampView.findViewById(R.id.LampFragmentImage);
+        powerSwitch.setEnabled(true);
 
+        setSliders();
         setListeners();
     }
 
@@ -48,8 +55,19 @@ public class LampFragment extends Fragment {
         lampHSV[0] = ((float) lamp.getHue()/65535.f) * 360;
         lampHSV[1] = (float) lamp.getSat()/254.f;
         lampHSV[2] = (float) lamp.getBri()/254.f;
-        lampImage.setBackgroundColor(Color.HSVToColor(lampHSV));
+        lampImage.setColorFilter(Color.HSVToColor(lampHSV));
 //        connection.changeLamp(lamp);
+    }
+
+    private void setSliders(){
+        hueSlider.setEnabled(true);
+        saturationSlider.setEnabled(true);
+        brightnessSlider.setEnabled(true);
+        hueSlider.setProgress(lamp.getHue());
+        saturationSlider.setProgress(lamp.getSat());
+        brightnessSlider.setProgress(lamp.getBri());
+
+        setLampColor();
     }
 
     private void setListeners() {
