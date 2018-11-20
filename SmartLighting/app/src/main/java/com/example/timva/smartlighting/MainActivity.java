@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -39,13 +40,15 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
                 lamps.clear();
                 connection.setApiCode(null);
                 mainRecyclerAdapter.notifyDataSetChanged();
-                if(emulatorSwitch.isChecked())
-                    connection.establishConnection("http://145.49.12.150:80/api/");
+                if(emulatorSwitch.isChecked()) {
+                    connection.establishConnection("http://145.49.58.161:80/api/");
+                    //connection.establishConnection("http://145.49.12.150:80/api/");
+                }
             }
         });
 
         lampFragment = (LampFragment) getFragmentManager().findFragmentById(R.id.LampFragment);
-
+        lampFragment.setConnection(connection);
         masterFragment = (MasterFragment) getFragmentManager().findFragmentById(R.id.MainMasterFragment);
 
 
@@ -64,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
 
     @Override
     public void OnLampAvailable(Lamp lamp) {
+        Log.i("Available", "Available");
         lamps.add(lamp);
         mainRecyclerAdapter.notifyDataSetChanged();
     }

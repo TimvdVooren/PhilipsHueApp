@@ -37,7 +37,6 @@ public class LampFragment extends Fragment implements VolleyListener {
         brightnessSlider.setEnabled(false);
         powerSwitch.setEnabled(false);
 
-        connection = VolleyConnection.getInstance(lampView.getContext(), this);
         return lampView;
     }
 
@@ -49,6 +48,10 @@ public class LampFragment extends Fragment implements VolleyListener {
 
         setSliders();
         setListeners();
+    }
+
+    public void setConnection(VolleyConnection connection) {
+        this.connection = connection;
     }
 
     private void setLampColor(){
