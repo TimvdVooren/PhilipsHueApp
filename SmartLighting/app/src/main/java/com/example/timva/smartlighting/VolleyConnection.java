@@ -83,7 +83,8 @@ public class VolleyConnection {
         this.queue.add(request);
     }
 
-    public void getLamps(String requestUrl){
+    public void getLamps(){
+        String requestUrl = url + apiCode;
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -128,9 +129,7 @@ public class VolleyConnection {
         try {
             if(apiCode == null) {
                 apiCode = response.getJSONObject(0).getJSONObject("success").getString("username");
-                getLamps(url + apiCode);
-            } else{
-
+                getLamps();
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -148,6 +147,5 @@ public class VolleyConnection {
     public void setApiCode(String apiCode){
         this.apiCode = apiCode;
     }
-
 
 }

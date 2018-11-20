@@ -14,7 +14,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-public class LampFragment extends Fragment implements VolleyListener {
+public class LampFragment extends Fragment {
     private Lamp lamp;
     private Switch powerSwitch;
     private SeekBar hueSlider;
@@ -35,10 +35,9 @@ public class LampFragment extends Fragment implements VolleyListener {
         brightnessSlider = lampView.findViewById(R.id.BrightnessSlider);
         title = lampView.findViewById(R.id.LampFragmentTitle);
 
-        hueSlider.setEnabled(false);
-        saturationSlider.setEnabled(false);
-        brightnessSlider.setEnabled(false);
+        setSliders(false, 0, 0, 0);
         powerSwitch.setEnabled(false);
+
 
         return lampView;
     }
@@ -50,7 +49,7 @@ public class LampFragment extends Fragment implements VolleyListener {
         powerSwitch.setEnabled(true);
         title.setText("Lamp: " + lamp.getId());
 
-        setSliders();
+        setSliders(true, lamp.getHue(), lamp.getSat(), lamp.getBri());
         setListeners();
     }
 
@@ -65,17 +64,18 @@ public class LampFragment extends Fragment implements VolleyListener {
         lampHSV[2] = (float) lamp.getBri()/254.f;
         lampImage.setColorFilter(Color.HSVToColor(lampHSV));
         connection.changeLamp(lamp);
+        connection.getLamps();
     }
 
-    private void setSliders(){
-        hueSlider.setEnabled(true);
-        saturationSlider.setEnabled(true);
-        brightnessSlider.setEnabled(true);
-        hueSlider.setProgress(lamp.getHue());
-        saturationSlider.setProgress(lamp.getSat());
-        brightnessSlider.setProgress(lamp.getBri());
-
-        setLampColor();
+    public void setSliders(boolean enabled, int hue, int sat, int bri){
+        hueSlider.setEnabled(enabled);
+        saturationSlider.setEnabled(enabled);
+        brightnessSlider.setEnabled(enabled);
+        hueSlider.setProgress(hue);
+        saturationSlider.setProgress(sat);
+        brightnessSlider.setProgress(bri);
+        if(lamp != null)
+            setLampColor();
     }
 
     private void setListeners() {
@@ -137,15 +137,5 @@ public class LampFragment extends Fragment implements VolleyListener {
                 setLampColor();
             }
         });
-    }
-
-    @Override
-    public void OnLampAvailable(Lamp lamp) {
-
-    }
-
-    @Override
-    public void OnLampError(String error) {
-
     }
 }
