@@ -98,7 +98,6 @@ public class VolleyConnection {
                         try {
                             JSONObject lights = response.getJSONObject("lights");
                             JSONArray jsonArray = lights.toJSONArray(lights.names());
-                            System.out.println(jsonArray.length());
                             for (int i = 0; i < jsonArray.length(); i++)
                             {
                                 JSONObject lamp1 = jsonArray.getJSONObject(i);

@@ -12,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Switch;
+import android.widget.TextView;
 
 public class LampFragment extends Fragment implements VolleyListener {
     private Lamp lamp;
@@ -21,6 +22,7 @@ public class LampFragment extends Fragment implements VolleyListener {
     private SeekBar brightnessSlider;
     private ImageView lampImage;
     private VolleyConnection connection;
+    private TextView title;
 
     private View lampView;
     @Nullable
@@ -31,6 +33,7 @@ public class LampFragment extends Fragment implements VolleyListener {
         hueSlider = lampView.findViewById(R.id.HueSlider);
         saturationSlider = lampView.findViewById(R.id.SaturationSlider);
         brightnessSlider = lampView.findViewById(R.id.BrightnessSlider);
+        title = lampView.findViewById(R.id.LampFragmentTitle);
 
         hueSlider.setEnabled(false);
         saturationSlider.setEnabled(false);
@@ -45,6 +48,7 @@ public class LampFragment extends Fragment implements VolleyListener {
         this.lamp = lamp;
         lampImage = lampView.findViewById(R.id.LampFragmentImage);
         powerSwitch.setEnabled(true);
+        title.setText("Lamp: " + lamp.getId());
 
         setSliders();
         setListeners();
