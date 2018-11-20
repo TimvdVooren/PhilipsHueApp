@@ -1,5 +1,6 @@
 package com.example.timva.smartlighting;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
 
         connection = VolleyConnection.getInstance(getApplicationContext(), this);
         lamps = new ArrayList<>();
@@ -37,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
         emulatorSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //lampFragment.setSliders(false, 0, 0, 0);
                 lamps.clear();
                 connection.setApiCode(null);
                 mainRecyclerAdapter.notifyDataSetChanged();
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
                     connection.establishConnection("http://145.48.205.33/api/");
             }
         });
+        lampFragment = (LampFragment) getFragmentManager().findFragmentById(R.id.LampFragment);
         lampFragment = (LampFragment) getFragmentManager().findFragmentById(R.id.LampFragment);
         lampFragment.setConnection(connection);
         masterFragment = (MasterFragment) getFragmentManager().findFragmentById(R.id.MainMasterFragment);
@@ -64,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
     @Override
     protected void onResume(){
         super.onResume();
-
     }
 
     @Override

@@ -29,6 +29,8 @@ public class LampFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         lampView = inflater.inflate(R.layout.lamp_fragment, container, false);
+        lampView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
         powerSwitch = lampView.findViewById(R.id.PowerSwitch);
         hueSlider = lampView.findViewById(R.id.HueSlider);
         saturationSlider = lampView.findViewById(R.id.SaturationSlider);
@@ -46,11 +48,23 @@ public class LampFragment extends Fragment {
     {
         this.lamp = lamp;
         lampImage = lampView.findViewById(R.id.LampFragmentImage);
-        powerSwitch.setEnabled(true);
         title.setText("Lamp: " + lamp.getId());
+        powerSwitch.setEnabled(true);
+        powerSwitch.setChecked(lamp.isOn());
 
         setSliders(true, lamp.getHue(), lamp.getSat(), lamp.getBri());
         setListeners();
+    }
+
+    private void setSliders(boolean enabled, int hue, int sat, int bri){
+        hueSlider.setEnabled(enabled);
+        saturationSlider.setEnabled(enabled);
+        brightnessSlider.setEnabled(enabled);
+        hueSlider.setProgress(hue);
+        saturationSlider.setProgress(sat);
+        brightnessSlider.setProgress(bri);
+        if(lamp != null)
+            setLampColor();
     }
 
     public void setConnection(VolleyConnection connection) {
@@ -65,17 +79,6 @@ public class LampFragment extends Fragment {
         lampImage.setColorFilter(Color.HSVToColor(lampHSV));
         connection.changeLamp(lamp);
         connection.getLamps();
-    }
-
-    public void setSliders(boolean enabled, int hue, int sat, int bri){
-        hueSlider.setEnabled(enabled);
-        saturationSlider.setEnabled(enabled);
-        brightnessSlider.setEnabled(enabled);
-        hueSlider.setProgress(hue);
-        saturationSlider.setProgress(sat);
-        brightnessSlider.setProgress(bri);
-        if(lamp != null)
-            setLampColor();
     }
 
     private void setListeners() {

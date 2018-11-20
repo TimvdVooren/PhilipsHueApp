@@ -2,6 +2,7 @@ package com.example.timva.smartlighting;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +22,7 @@ public class MasterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         masterview = inflater.inflate(R.layout.master_fragment, container, false);
-
+        masterview.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
         return masterview;
     }
