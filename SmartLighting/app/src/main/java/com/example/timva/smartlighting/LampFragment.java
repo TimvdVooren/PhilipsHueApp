@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
-public class LampFragment extends Fragment {
+public class LampFragment extends Fragment implements VolleyListener {
     private Lamp lamp;
     private Switch powerSwitch;
     private SeekBar hueSlider;
@@ -37,6 +37,7 @@ public class LampFragment extends Fragment {
         brightnessSlider.setEnabled(false);
         powerSwitch.setEnabled(false);
 
+        connection = VolleyConnection.getInstance(lampView.getContext(), this);
         return lampView;
     }
 
@@ -56,7 +57,7 @@ public class LampFragment extends Fragment {
         lampHSV[1] = (float) lamp.getSat()/254.f;
         lampHSV[2] = (float) lamp.getBri()/254.f;
         lampImage.setColorFilter(Color.HSVToColor(lampHSV));
-//        connection.changeLamp(lamp);
+        connection.changeLamp(lamp);
     }
 
     private void setSliders(){
@@ -131,4 +132,13 @@ public class LampFragment extends Fragment {
         });
     }
 
+    @Override
+    public void OnLampAvailable(Lamp lamp) {
+
+    }
+
+    @Override
+    public void OnLampError(String error) {
+
+    }
 }
