@@ -8,11 +8,16 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LampFragment extends Fragment {
     private Lamp lamp;
@@ -23,6 +28,9 @@ public class LampFragment extends Fragment {
     private ImageView lampImage;
     private VolleyConnection connection;
     private TextView title;
+    private Button disco;
+    private Timer timer;
+    private boolean discoOn;
 
     private View lampView;
     @Nullable
@@ -36,6 +44,10 @@ public class LampFragment extends Fragment {
         saturationSlider = lampView.findViewById(R.id.SaturationSlider);
         brightnessSlider = lampView.findViewById(R.id.BrightnessSlider);
         title = lampView.findViewById(R.id.LampFragmentTitle);
+        disco = lampView.findViewById(R.id.LampfragmentDisco);
+
+        timer = new Timer();
+        discoOn = false;
 
         setSliders(false, 0, 0, 0);
         powerSwitch.setEnabled(false);
@@ -137,6 +149,30 @@ public class LampFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 setLampColor();
+            }
+        });
+
+        disco.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(discoOn)
+                {
+                    discoOn = false;
+                    timer.cancel();
+                    timer.purge();
+                }
+                else
+                {
+                    timer.scheduleAtFixedRate(new TimerTask() {
+                        @Override
+                        public void run() {
+                            Random random = new Random();
+                            lamp.setHue(random.nextInt(65)*1000);
+                            setLampColor();
+                        }
+                    },500,500);
+                    discoOn = true;
+                }
             }
         });
     }
