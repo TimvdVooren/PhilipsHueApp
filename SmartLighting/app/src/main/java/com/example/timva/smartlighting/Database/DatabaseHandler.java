@@ -52,10 +52,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(Util.KEY_BRIGHTNES, lamp.getBri());
         contentValues.put(Util.KEY_HUE, lamp.getHue());
         contentValues.put(Util.KEY_SATURATION, lamp.getSat());
+        if(getLamp(lamp.getId()) == null)
+        {
+            // Add the row to the table:
+            db.insert(Util.TABLE_LAMPS, null, contentValues);
+        }
+        else
+        {
+            String UPDATE_LAMP = "UPDATE " + Util.TABLE_LAMPS + " SET " + Util.KEY_BRIGHTNES + " = '" + lamp.getBri() +
+                    "', " +Util.KEY_HUE +" = '" + lamp.getHue()+"', "+ Util.KEY_SATURATION + " = '" + lamp.getSat()+"' WHERE "+Util.KEY_ID +" = '" + lamp.getId() +"'";
+            // Update the row wich already exist
+            //db.update(Util.TABLE_LAMPS, contentValues, String.valueOf(lamp.getId()), null);
+            db.execSQL(UPDATE_LAMP);
+        }
 
-        // Add the row to the table:
-        db.insert(Util.TABLE_LAMPS, null, contentValues);
-        
+
     }
 
     public Lamp getLamp(int id) {
