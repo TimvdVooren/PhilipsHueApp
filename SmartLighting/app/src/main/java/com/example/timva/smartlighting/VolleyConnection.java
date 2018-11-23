@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -44,7 +45,13 @@ public class VolleyConnection {
         return instance;
     }
 
-    public void establishConnection(String url){
+    public void establishConnection(){
+        this.url = "http://145.48.205.33/api/";
+        this.apiCode = "iYrmsQq1wu5FxF9CPqpJCnm1GpPVylKBWDUsNDhB";
+        getLamps();
+    }
+
+    public void establishEmulatorConnection(String url){
         this.url = url;
         sendRequest(url, "{\"devicetype\":\"TimsHueApp\"}", Request.Method.POST);
     }
@@ -53,6 +60,7 @@ public class VolleyConnection {
         String lampUrl = url + apiCode + "/lights/" + lamp.getId() + "/state/";
         String requestBody = String.format("{\"on\":%b, \"bri\":%d, \"hue\":%d, \"sat\":%d}", lamp.isOn(), lamp.getBri(), lamp.getHue(), lamp.getSat());
         sendRequest(lampUrl, requestBody, Request.Method.PUT);
+        getLamps();
     }
 
     private void sendRequest(final String requestUrl, final String requestBody, int requestMethod){
@@ -83,7 +91,7 @@ public class VolleyConnection {
         this.queue.add(request);
     }
 
-    public void getLamps(){
+    private void getLamps(){
         String requestUrl = url + apiCode;
 
         JsonObjectRequest request = new JsonObjectRequest(
@@ -98,11 +106,12 @@ public class VolleyConnection {
                         Log.i("HUE", "OK");
                         try {
                             JSONObject lights = response.getJSONObject("lights");
-                            JSONArray jsonArray = lights.toJSONArray(lights.names());
-                            for (int i = 0; i < jsonArray.length(); i++)
+
+                            JSONArray lightNames = lights.toJSONArray(lights.names());
+                            for (int i = 0; i < lightNames.length(); i++)
                             {
-                                JSONObject lamp1 = jsonArray.getJSONObject(i);
-                                Lamp lamp = new Lamp(i+1,lamp1.getJSONObject("state").getBoolean("on"), lamp1.getJSONObject("state").getInt("bri"), lamp1.getJSONObject("state").getInt("hue"), lamp1.getJSONObject("state").getInt("sat") );
+                                JSONObject lampObject = lights.getJSONObject(lights.names().getString(i));
+                                Lamp lamp = new Lamp(Integer.parseInt(lights.names().getString(i)),lampObject.getJSONObject("state").getBoolean("on"), lampObject.getJSONObject("state").getInt("bri"), lampObject.getJSONObject("state").getInt("hue"), lampObject.getJSONObject("state").getInt("sat") );
                                 volleyListener.OnLampAvailable(lamp);
                             }
 
@@ -127,10 +136,9 @@ public class VolleyConnection {
 
     private void onResponseListener(JSONArray response, String url){
         try {
-            if(apiCode == null) {
+            if(apiCode == null)
                 apiCode = response.getJSONObject(0).getJSONObject("success").getString("username");
-                getLamps();
-            }
+            getLamps();
         } catch (JSONException e) {
             e.printStackTrace();
         }

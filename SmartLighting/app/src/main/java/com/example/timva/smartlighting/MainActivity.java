@@ -43,11 +43,11 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
                 connection.setApiCode(null);
                 mainRecyclerAdapter.notifyDataSetChanged();
                 if(emulatorSwitch.isChecked()) {
-                    //connection.establishConnection("http://145.49.58.161:80/api/");
-                    connection.establishConnection("http://145.49.12.150:80/api/");
+                    //connection.establishEmulatorConnection("http://145.49.58.161:80/api/");
+                    connection.establishEmulatorConnection("http://145.49.12.150:80/api/");
                 }
                 else
-                    connection.establishConnection("http://145.48.205.33/api/");
+                    connection.establishConnection();
             }
         });
         lampFragment = (LampFragment) getFragmentManager().findFragmentById(R.id.LampFragment);
@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
         lampList.setLayoutManager(new LinearLayoutManager(this));
         mainRecyclerAdapter = new MainRecyclerAdapter(this, lamps, this);
         lampList.setAdapter(mainRecyclerAdapter);
+        connection.establishConnection();
     }
 
     @Override
@@ -71,7 +72,16 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
     @Override
     public void OnLampAvailable(Lamp lamp) {
         Log.i("Available", "Available");
-        lamps.add(lamp);
+
+        boolean alreadyPresent = false;
+        for(int i = 0; i < lamps.size(); i++) {
+            if (lamps.get(i).getId() == lamp.getId()) {
+                lamps.set(i, lamp);
+                alreadyPresent = true;
+            }
+        }
+        if(!alreadyPresent)
+            lamps.add(lamp);
         mainRecyclerAdapter.notifyDataSetChanged();
     }
 

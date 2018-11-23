@@ -78,7 +78,6 @@ public class LampFragment extends Fragment {
         lampHSV[2] = (float) lamp.getBri()/254.f;
         lampImage.setColorFilter(Color.HSVToColor(lampHSV));
         connection.changeLamp(lamp);
-        connection.getLamps();
     }
 
     private void setListeners() {
