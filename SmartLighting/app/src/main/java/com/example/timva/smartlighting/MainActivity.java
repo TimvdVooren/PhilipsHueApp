@@ -7,11 +7,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
+
+import com.example.timva.smartlighting.Database.DatabaseHandler;
+
 import java.util.*;
 import java.net.*;
 
@@ -25,6 +30,9 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
     private MainRecyclerAdapter mainRecyclerAdapter;
     private LampFragment lampFragment;
     private MasterFragment masterFragment;
+    private DatabaseHandler database;
+    private Button setFav;
+    private Button saveFav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +51,8 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
                 connection.setApiCode(null);
                 mainRecyclerAdapter.notifyDataSetChanged();
                 if(emulatorSwitch.isChecked()) {
-                    //connection.establishEmulatorConnection("http://145.49.58.161:80/api/");
-                    connection.establishEmulatorConnection("http://145.49.12.150:80/api/");
+                    connection.establishEmulatorConnection("http://145.49.58.161:80/api/");
+                    //connection.establishEmulatorConnection("http://145.49.12.150:80/api/");
                 }
                 else
                     connection.establishConnection();
@@ -61,6 +69,31 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
         lampList.setLayoutManager(new LinearLayoutManager(this));
         mainRecyclerAdapter = new MainRecyclerAdapter(this, lamps, this);
         lampList.setAdapter(mainRecyclerAdapter);
+
+        database = new DatabaseHandler(this);
+        saveFav = findViewById(R.id.MainSaveFav);
+        setFav = findViewById(R.id.MainSetFav);
+        saveFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(lampFragment.getLamp() != null) {
+                    database.addLamp(lampFragment.getLamp());
+                }
+            }
+        });
+
+        setFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(lampFragment.getLamp() != null) {
+                    Lamp lamp = database.getLamp(lampFragment.getLamp().getId());
+                    if(lamp != null) {
+                        lampFragment.setLampView(lamp);
+                    }
+                }
+            }
+        });
+
         connection.establishConnection();
     }
 

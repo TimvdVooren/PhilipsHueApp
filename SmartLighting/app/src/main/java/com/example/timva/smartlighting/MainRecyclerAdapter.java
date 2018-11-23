@@ -68,8 +68,10 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Lamp lamp = lamps.get(getAdapterPosition());
-                    fragmentInteractionListener.onFragmentInteraction(lamp);
+                    if(getAdapterPosition() >= 0) {
+                        Lamp lamp = lamps.get(getAdapterPosition());
+                        fragmentInteractionListener.onFragmentInteraction(lamp);
+                    }
                 }
             });
         }

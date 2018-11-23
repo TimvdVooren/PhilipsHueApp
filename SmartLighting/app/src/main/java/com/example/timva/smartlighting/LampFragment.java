@@ -140,4 +140,8 @@ public class LampFragment extends Fragment {
             }
         });
     }
+
+    public Lamp getLamp() {
+        return lamp;
+    }
 }
