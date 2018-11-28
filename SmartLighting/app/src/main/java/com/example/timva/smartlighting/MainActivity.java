@@ -92,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
             saveFav.setText("Save");
         }
         lampFragment = (LampFragment) getFragmentManager().findFragmentById(R.id.LampFragment);
-        lampFragment = (LampFragment) getFragmentManager().findFragmentById(R.id.LampFragment);
         lampFragment.setConnection(connection);
         masterFragment = (MasterFragment) getFragmentManager().findFragmentById(R.id.MainMasterFragment);
 
