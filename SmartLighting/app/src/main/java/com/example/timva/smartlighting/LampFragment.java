@@ -74,6 +74,7 @@ public class LampFragment extends Fragment {
             satText.setText("Verzadiging");
             brightnessText.setText("Helderheid");
             powerSwitch.setText("Aan/Uit");
+            allLampsSwitch.setText("Zet alle lampen");
         }
         else
         {
@@ -81,6 +82,7 @@ public class LampFragment extends Fragment {
             satText.setText("Saturation");
             brightnessText.setText("Brightness");
             powerSwitch.setText("Power");
+            allLampsSwitch.setText("Set all lamps");
         }
 
 
