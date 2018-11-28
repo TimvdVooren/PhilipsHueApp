@@ -99,10 +99,22 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
         lampList = findViewById(R.id.MainList);
         lampList.setHasFixedSize(true);
         lampList.setLayoutManager(new LinearLayoutManager(this));
-        mainRecyclerAdapter = new MainRecyclerAdapter(this, lamps, this);
+        database = new DatabaseHandler(this);
+        mainRecyclerAdapter = new MainRecyclerAdapter(this, lamps, this, database);
         lampList.setAdapter(mainRecyclerAdapter);
 
-        database = new DatabaseHandler(this);
+        saveFav = findViewById(R.id.MainSaveFav);
+        setFav = findViewById(R.id.MainSetFav);
+        saveFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(lampFragment.getLamp() != null) {
+                    database.addLamp(lampFragment.getLamp());
+                    mainRecyclerAdapter.setFavColorLamp(lampFragment.getLamp());
+                    mainRecyclerAdapter.notifyDataSetChanged();
+                }
+            }
+        });
 
 
         connection.establishConnection();
