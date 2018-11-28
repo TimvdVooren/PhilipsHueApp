@@ -43,34 +43,6 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
         connection = VolleyConnection.getInstance(getApplicationContext(), this);
         lamps = new ArrayList<>();
 
-        emulatorSwitch = findViewById(R.id.EmulatorSwitch);
-        emulatorSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                lamps.clear();
-                connection.setApiCode(null);
-                mainRecyclerAdapter.notifyDataSetChanged();
-                if(emulatorSwitch.isChecked()) {
-                    connection.establishEmulatorConnection("http://145.49.58.161:80/api/");
-                    //connection.establishEmulatorConnection("http://145.49.12.150:80/api/");
-                }
-                else
-                    connection.establishConnection();
-            }
-        });
-        lampFragment = (LampFragment) getFragmentManager().findFragmentById(R.id.LampFragment);
-        lampFragment = (LampFragment) getFragmentManager().findFragmentById(R.id.LampFragment);
-        lampFragment.setConnection(connection);
-        masterFragment = (MasterFragment) getFragmentManager().findFragmentById(R.id.MainMasterFragment);
-
-
-        lampList = findViewById(R.id.MainList);
-        lampList.setHasFixedSize(true);
-        lampList.setLayoutManager(new LinearLayoutManager(this));
-        mainRecyclerAdapter = new MainRecyclerAdapter(this, lamps, this);
-        lampList.setAdapter(mainRecyclerAdapter);
-
-        database = new DatabaseHandler(this);
         saveFav = findViewById(R.id.MainSaveFav);
         setFav = findViewById(R.id.MainSetFav);
         saveFav.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +65,46 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
                 }
             }
         });
+
+        emulatorSwitch = findViewById(R.id.EmulatorSwitch);
+        emulatorSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                lamps.clear();
+                connection.setApiCode(null);
+                mainRecyclerAdapter.notifyDataSetChanged();
+                if(emulatorSwitch.isChecked()) {
+                    connection.establishEmulatorConnection("http://145.49.58.161:80/api/");
+                    //connection.establishEmulatorConnection("http://145.49.12.150:80/api/");
+                }
+                else
+                    connection.establishConnection();
+            }
+        });
+        if(Locale.getDefault().getLanguage() == "nl")
+        {
+            emulatorSwitch.setText("Gebruik lamp emulator ");
+            saveFav.setText("Opslaan");
+        }
+        else
+        {
+            emulatorSwitch.setText("Use lamp emulator ");
+            saveFav.setText("Save");
+        }
+        lampFragment = (LampFragment) getFragmentManager().findFragmentById(R.id.LampFragment);
+        lampFragment = (LampFragment) getFragmentManager().findFragmentById(R.id.LampFragment);
+        lampFragment.setConnection(connection);
+        masterFragment = (MasterFragment) getFragmentManager().findFragmentById(R.id.MainMasterFragment);
+
+
+        lampList = findViewById(R.id.MainList);
+        lampList.setHasFixedSize(true);
+        lampList.setLayoutManager(new LinearLayoutManager(this));
+        mainRecyclerAdapter = new MainRecyclerAdapter(this, lamps, this);
+        lampList.setAdapter(mainRecyclerAdapter);
+
+        database = new DatabaseHandler(this);
+
 
         connection.establishConnection();
     }

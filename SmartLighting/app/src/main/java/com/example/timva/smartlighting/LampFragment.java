@@ -16,6 +16,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.Locale;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,6 +33,9 @@ public class LampFragment extends Fragment {
     private Button disco;
     private Timer timer;
     private boolean discoOn;
+    private TextView hueText;
+    private TextView satText;
+    private TextView brightnessText;
 
     private View lampView;
     @Nullable
@@ -55,6 +59,24 @@ public class LampFragment extends Fragment {
         powerSwitch.setEnabled(false);
         disco.setEnabled(false);
         lampImage.setVisibility(View.INVISIBLE);
+
+        hueText = lampView.findViewById(R.id.HueText);
+        satText = lampView.findViewById(R.id.SaturationText);
+        brightnessText = lampView.findViewById(R.id.BrightnessText);
+        if(Locale.getDefault().getLanguage() == "nl")
+        {
+            hueText.setText("Tint");
+            satText.setText("Verzadiging");
+            brightnessText.setText("Helderheid");
+            powerSwitch.setText("Aan/Uit");
+        }
+        else
+        {
+            hueText.setText("Hue");
+            satText.setText("Saturation");
+            brightnessText.setText("Brightness");
+            powerSwitch.setText("Power");
+        }
 
 
         return lampView;

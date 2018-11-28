@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapter.ViewHolder> {
 
@@ -39,7 +40,27 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
         Lamp lamp = lamps.get(position);
 
         holder.title.setText("Lamp " + lamp.getId());
-        holder.onText.setText("On: " + lamp.isOn());
+        if(lamp.isOn())
+        {
+            if(Locale.getDefault().getLanguage() == "nl")
+            {
+                holder.onText.setText("Aan");
+            }
+            else
+            {
+                holder.onText.setText("On");
+            }
+        }
+        else {
+            if(Locale.getDefault().getLanguage() == "nl")
+            {
+                holder.onText.setText("Uit");
+            }
+            else
+            {
+                holder.onText.setText("Off");
+            }
+        }
         if(lamp.isOn())
             holder.lampColor.setVisibility(View.VISIBLE);
         else
