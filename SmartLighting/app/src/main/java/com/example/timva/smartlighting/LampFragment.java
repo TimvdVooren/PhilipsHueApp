@@ -27,13 +27,16 @@ public class LampFragment extends Fragment {
     private SeekBar saturationSlider;
     private SeekBar brightnessSlider;
     private ImageView lampImage;
-    private VolleyConnection connection;
     private TextView title;
-    private Button disco;
+    private Button discoButton;
+    private Switch allLampsSwitch;
+    private VolleyConnection connection;
     private Timer timer;
     private boolean discoOn;
+    private boolean setAllLamps;
 
     private View lampView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -46,16 +49,17 @@ public class LampFragment extends Fragment {
         brightnessSlider = lampView.findViewById(R.id.BrightnessSlider);
         lampImage = lampView.findViewById(R.id.LampFragmentImage);
         title = lampView.findViewById(R.id.LampFragmentTitle);
-        disco = lampView.findViewById(R.id.LampfragmentDisco);
+        discoButton = lampView.findViewById(R.id.LampfragmentDisco);
+        allLampsSwitch = lampView.findViewById(R.id.AllLampsSwitch);
 
         timer = new Timer();
         discoOn = false;
 
         setSliders(false, 0, 0, 0);
         powerSwitch.setEnabled(false);
-        disco.setEnabled(false);
+        discoButton.setEnabled(false);
+        allLampsSwitch.setEnabled(false);
         lampImage.setVisibility(View.INVISIBLE);
-
 
         return lampView;
     }
@@ -66,7 +70,8 @@ public class LampFragment extends Fragment {
         title.setText("Lamp: " + lamp.getId());
         powerSwitch.setEnabled(true);
         powerSwitch.setChecked(lamp.isOn());
-        disco.setEnabled(true);
+        discoButton.setEnabled(true);
+        allLampsSwitch.setEnabled(true);
         if(lamp.isOn())
             lampImage.setVisibility(View.VISIBLE);
         else
@@ -97,7 +102,10 @@ public class LampFragment extends Fragment {
         lampHSV[1] = (float) lamp.getSat()/254.f;
         lampHSV[2] = (float) lamp.getBri()/254.f;
         lampImage.setColorFilter(Color.HSVToColor(lampHSV));
-        connection.changeLamp(lamp);
+        if(!setAllLamps)
+            connection.changeLamp(lamp);
+        else
+            connection.changeAllLamps(lamp);
     }
 
     private void setListeners() {
@@ -109,7 +117,11 @@ public class LampFragment extends Fragment {
                     lampImage.setVisibility(View.VISIBLE);
                 else
                     lampImage.setVisibility(View.INVISIBLE);
-                connection.changeLamp(lamp);
+
+                if(!setAllLamps)
+                    connection.changeLamp(lamp);
+                else
+                    connection.changeAllLamps(lamp);
             }
         });
 
@@ -164,7 +176,7 @@ public class LampFragment extends Fragment {
             }
         });
 
-        disco.setOnClickListener(new View.OnClickListener() {
+        discoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -188,6 +200,13 @@ public class LampFragment extends Fragment {
                     },500,500);
                     discoOn = true;
                 }
+            }
+        });
+
+        allLampsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                setAllLamps = isChecked;
             }
         });
     }

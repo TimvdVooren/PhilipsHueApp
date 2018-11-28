@@ -32,6 +32,7 @@ public class VolleyConnection {
 
     private String url = "";
     private String apiCode = null;
+    private ArrayList<String> lampIds = new ArrayList<>();
 
     public VolleyConnection(Context context, VolleyListener listener){
         this.context = context;
@@ -60,6 +61,16 @@ public class VolleyConnection {
         String lampUrl = url + apiCode + "/lights/" + lamp.getId() + "/state/";
         String requestBody = String.format("{\"on\":%b, \"bri\":%d, \"hue\":%d, \"sat\":%d}", lamp.isOn(), lamp.getBri(), lamp.getHue(), lamp.getSat());
         sendRequest(lampUrl, requestBody, Request.Method.PUT);
+        getLamps();
+    }
+
+    public void changeAllLamps(Lamp lamp){
+        getLamps();
+        for(String lampID: lampIds){
+            String lampUrl = url + apiCode + "/lights/" + lampID + "/state/";
+            String requestBody = String.format("{\"on\":%b, \"bri\":%d, \"hue\":%d, \"sat\":%d}", lamp.isOn(), lamp.getBri(), lamp.getHue(), lamp.getSat());
+            sendRequest(lampUrl, requestBody, Request.Method.PUT);
+        }
         getLamps();
     }
 
@@ -105,13 +116,17 @@ public class VolleyConnection {
                     public void onResponse(JSONObject response) {
                         Log.i("HUE", "OK");
                         try {
+                            lampIds.clear();
                             JSONObject lights = response.getJSONObject("lights");
 
                             JSONArray lightNames = lights.toJSONArray(lights.names());
                             for (int i = 0; i < lightNames.length(); i++)
                             {
-                                JSONObject lampObject = lights.getJSONObject(lights.names().getString(i));
-                                Lamp lamp = new Lamp(Integer.parseInt(lights.names().getString(i)),lampObject.getJSONObject("state").getBoolean("on"), lampObject.getJSONObject("state").getInt("bri"), lampObject.getJSONObject("state").getInt("hue"), lampObject.getJSONObject("state").getInt("sat") );
+                                String lampID = lights.names().getString(i);
+                                lampIds.add(lampID);
+
+                                JSONObject lampObject = lights.getJSONObject(lampID);
+                                Lamp lamp = new Lamp(Integer.parseInt(lampID),lampObject.getJSONObject("state").getBoolean("on"), lampObject.getJSONObject("state").getInt("bri"), lampObject.getJSONObject("state").getInt("hue"), lampObject.getJSONObject("state").getInt("sat") );
                                 volleyListener.OnLampAvailable(lamp);
                             }
 
