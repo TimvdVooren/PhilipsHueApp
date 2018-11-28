@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
             public void onClick(View v) {
                 if(lampFragment.getLamp() != null) {
                     database.addLamp(lampFragment.getLamp());
+                    mainRecyclerAdapter.setFavColorLamp(lampFragment.getLamp());
+                    mainRecyclerAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -102,20 +104,6 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
         database = new DatabaseHandler(this);
         mainRecyclerAdapter = new MainRecyclerAdapter(this, lamps, this, database);
         lampList.setAdapter(mainRecyclerAdapter);
-
-        saveFav = findViewById(R.id.MainSaveFav);
-        setFav = findViewById(R.id.MainSetFav);
-        saveFav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(lampFragment.getLamp() != null) {
-                    database.addLamp(lampFragment.getLamp());
-                    mainRecyclerAdapter.setFavColorLamp(lampFragment.getLamp());
-                    mainRecyclerAdapter.notifyDataSetChanged();
-                }
-            }
-        });
-
 
         connection.establishConnection();
     }

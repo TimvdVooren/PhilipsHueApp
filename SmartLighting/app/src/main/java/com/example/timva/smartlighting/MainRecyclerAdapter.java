@@ -55,27 +55,18 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
             setFavColorLamp(databaseLamp);
 
         holder.title.setText("Lamp " + lamp.getId());
+
         if(lamp.isOn())
-        {
             if(Locale.getDefault().getLanguage() == "nl")
-            {
                 holder.onText.setText("Aan");
-            }
             else
-            {
                 holder.onText.setText("On");
-            }
-        }
-        else {
+        else
             if(Locale.getDefault().getLanguage() == "nl")
-            {
                 holder.onText.setText("Uit");
-            }
             else
-            {
                 holder.onText.setText("Off");
-            }
-        }
+
         if(lamp.isOn())
             holder.lampColor.setVisibility(View.VISIBLE);
         else
