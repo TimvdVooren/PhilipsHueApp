@@ -167,11 +167,13 @@ public class LampFragment extends Fragment {
         disco.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(discoOn)
                 {
                     discoOn = false;
                     timer.cancel();
                     timer.purge();
+                    timer = new Timer();
                 }
                 else
                 {
