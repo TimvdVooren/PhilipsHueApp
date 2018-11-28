@@ -40,6 +40,11 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
 
         holder.title.setText("Lamp " + lamp.getId());
         holder.onText.setText("On: " + lamp.isOn());
+        if(lamp.isOn())
+            holder.lampColor.setVisibility(View.VISIBLE);
+        else
+            holder.lampColor.setVisibility(View.INVISIBLE);
+
         float[] lampHSV = new float[3];
         lampHSV[0] = ((float) lamp.getHue()/65535.f) * 360;
         lampHSV[1] = (float) lamp.getSat()/254.f;

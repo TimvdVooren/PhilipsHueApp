@@ -3,6 +3,7 @@ package com.example.timva.smartlighting;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -43,6 +44,7 @@ public class LampFragment extends Fragment {
         hueSlider = lampView.findViewById(R.id.HueSlider);
         saturationSlider = lampView.findViewById(R.id.SaturationSlider);
         brightnessSlider = lampView.findViewById(R.id.BrightnessSlider);
+        lampImage = lampView.findViewById(R.id.LampFragmentImage);
         title = lampView.findViewById(R.id.LampFragmentTitle);
         disco = lampView.findViewById(R.id.LampfragmentDisco);
 
@@ -51,6 +53,8 @@ public class LampFragment extends Fragment {
 
         setSliders(false, 0, 0, 0);
         powerSwitch.setEnabled(false);
+        disco.setEnabled(false);
+        lampImage.setVisibility(View.INVISIBLE);
 
 
         return lampView;
@@ -59,10 +63,14 @@ public class LampFragment extends Fragment {
     public void setLampView(Lamp lamp)
     {
         this.lamp = lamp;
-        lampImage = lampView.findViewById(R.id.LampFragmentImage);
         title.setText("Lamp: " + lamp.getId());
         powerSwitch.setEnabled(true);
         powerSwitch.setChecked(lamp.isOn());
+        disco.setEnabled(true);
+        if(lamp.isOn())
+            lampImage.setVisibility(View.VISIBLE);
+        else
+            lampImage.setVisibility(View.INVISIBLE);
 
         setSliders(true, lamp.getHue(), lamp.getSat(), lamp.getBri());
         setListeners();
@@ -97,6 +105,10 @@ public class LampFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 lamp.setOn(isChecked);
+                if(isChecked)
+                    lampImage.setVisibility(View.VISIBLE);
+                else
+                    lampImage.setVisibility(View.INVISIBLE);
                 connection.changeLamp(lamp);
             }
         });
@@ -167,8 +179,9 @@ public class LampFragment extends Fragment {
                         @Override
                         public void run() {
                             Random random = new Random();
-                            lamp.setHue(random.nextInt(65)*1000);
+                            lamp.setHue(random.nextInt(65535));
                             setLampColor();
+                            setSliders(true, lamp.getHue(), lamp.getSat(), lamp.getBri());
                         }
                     },500,500);
                     discoOn = true;
