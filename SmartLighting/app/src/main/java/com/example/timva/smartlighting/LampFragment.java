@@ -45,7 +45,7 @@ public class LampFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         lampView = inflater.inflate(R.layout.lamp_fragment, container, false);
-        lampView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        lampView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
 
         powerSwitch = lampView.findViewById(R.id.PowerSwitch);
         hueSlider = lampView.findViewById(R.id.HueSlider);
@@ -225,10 +225,16 @@ public class LampFragment extends Fragment {
                         public void run() {
                             Random random = new Random();
                             lamp.setHue(random.nextInt(65535));
-                            setLampColor();
-                            setSliders(true, lamp.getHue(), lamp.getSat(), lamp.getBri());
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    setLampColor();
+                                    setSliders(true, lamp.getHue(), lamp.getSat(), lamp.getBri());
+                                }
+                            });
                         }
-                    },500,500);
+                    },1000,1000);
                     discoOn = true;
                 }
             }

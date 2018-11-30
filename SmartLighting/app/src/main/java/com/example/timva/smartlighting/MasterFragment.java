@@ -22,7 +22,7 @@ public class MasterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         masterview = inflater.inflate(R.layout.master_fragment, container, false);
-        masterview.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        masterview.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
 
         return masterview;
     }
