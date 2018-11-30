@@ -74,7 +74,8 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
                 connection.setApiCode(null);
                 mainRecyclerAdapter.notifyDataSetChanged();
                 if(emulatorSwitch.isChecked()) {
-                    connection.establishEmulatorConnection("http://145.49.58.161:80/api/");
+                    //connection.establishEmulatorConnection("http://145.49.58.161:80/api/");
+                    connection.establishEmulatorConnection("http://192.168.2.12:80/api/");
                     //connection.establishEmulatorConnection("http://145.49.12.150:80/api/");
                 }
                 else
@@ -105,12 +106,19 @@ public class MainActivity extends AppCompatActivity implements VolleyListener, O
         database = new DatabaseHandler(this);
 
 
-        connection.establishConnection();
+
     }
 
     @Override
     protected void onResume(){
         super.onResume();
+        connection.establishConnection();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        lamps.clear();
     }
 
     @Override

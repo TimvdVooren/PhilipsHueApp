@@ -89,6 +89,12 @@ public class LampFragment extends Fragment {
         return lampView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
     public void setLampView(Lamp lamp)
     {
         this.lamp = lamp;
