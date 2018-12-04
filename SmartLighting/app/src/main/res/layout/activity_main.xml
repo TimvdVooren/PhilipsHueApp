@@ -17,7 +17,7 @@
         android:textColor="@color/colorAccent"
         android:textOff="Off"
         android:textOn="On"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
